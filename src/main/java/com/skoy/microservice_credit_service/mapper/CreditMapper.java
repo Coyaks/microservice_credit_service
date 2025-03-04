@@ -10,8 +10,9 @@ public class CreditMapper {
         item.setId(dto.getId());
         item.setCustomerId(dto.getCustomerId());
         item.setCreditType(dto.getCreditType());
-        item.setAmount(dto.getAmount());
-        item.setBalance(dto.getBalance());
+        item.setCreditLimit(dto.getCreditLimit());
+        item.setAvailableBalance(dto.getAvailableBalance());
+        item.setUsedCredit(dto.getUsedCredit());
         item.setCurrency(dto.getCurrency());
         return item;
     }
@@ -21,8 +22,9 @@ public class CreditMapper {
         dto.setId(item.getId());
         dto.setCustomerId(item.getCustomerId());
         dto.setCreditType(item.getCreditType());
-        dto.setAmount(item.getAmount());
-        dto.setBalance(item.getBalance());
+        dto.setCreditLimit(item.getCreditLimit());
+        dto.setAvailableBalance(item.getAvailableBalance());
+        dto.setUsedCredit(item.getUsedCredit());
         dto.setCurrency(item.getCurrency());
         return dto;
     }

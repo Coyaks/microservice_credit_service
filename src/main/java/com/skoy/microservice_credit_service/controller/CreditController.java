@@ -1,6 +1,10 @@
 package com.skoy.microservice_credit_service.controller;
 
 import com.skoy.microservice_credit_service.dto.CreditDTO;
+import com.skoy.microservice_credit_service.dto.GetAvailableBalanceDTO;
+import com.skoy.microservice_credit_service.dto.UpdateBalanceDTO;
+import com.skoy.microservice_credit_service.enums.CreditTypeEnum;
+import com.skoy.microservice_credit_service.model.Credit;
 import com.skoy.microservice_credit_service.service.ICreditService;
 import com.skoy.microservice_credit_service.utils.ApiResponse;
 import org.slf4j.Logger;
@@ -9,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.math.BigDecimal;
 
 
 @RestController
@@ -30,10 +36,14 @@ public class CreditController {
     }
 
     @GetMapping("/{id}")
-    public Mono<CreditDTO> findById(@PathVariable String id) {
+    public Mono<ApiResponse<CreditDTO>> findById(@PathVariable String id) {
         logger.info("Fetching credits with ID: {}", id);
         return service.findById(id)
-                .doOnNext(item -> logger.info("credits found: {}", item))
+                .map(customer -> {
+                    logger.info("credits found: {}", customer);
+                    return new ApiResponse<>("Cliente encontrado", customer, 200);
+                })
+                .switchIfEmpty(Mono.just(new ApiResponse<>("Cliente no encontrado", null, 404)))
                 .doOnError(e -> logger.error("Error fetching credits with ID: {}", id, e));
     }
 
@@ -77,6 +87,41 @@ public class CreditController {
                     logger.error("Error deleting credits with ID: {}", id, e);
                     return Mono.just(new ApiResponse<Void>("Error al eliminar", null, 500));
                 });
+    }
+
+    @GetMapping("/types")
+    public CreditTypeEnum[] getAllCreditTypes() {
+        return CreditTypeEnum.values();
+    }
+
+    @GetMapping("/customer/{customerId}")
+    public Flux<CreditDTO> findAllByCustomerId(@PathVariable String customerId) {
+        logger.info("Fetching credits for customer ID: {}", customerId);
+        return service.findAllByCustomerId(customerId)
+                .doOnNext(item -> logger.info("credits found: {}", item))
+                .doOnComplete(() -> logger.info("All credits for customer fetched successfully."));
+    }
+
+    @PostMapping("/update_balance")
+    public Mono<ApiResponse<Credit>> updateBalance(@RequestBody UpdateBalanceDTO updateBalanceDTO) {
+        logger.info("Updating balance for bank account ID: {}", updateBalanceDTO.getProductTypeId());
+        return service.updateBalance(updateBalanceDTO)
+                .map(updatedAccount -> new ApiResponse<>("Balance actualizado correctamente", updatedAccount, 200))
+                .doOnError(e -> logger.error("Error updating balance for bank account ID: {}", updateBalanceDTO.getProductTypeId(), e));
+    }
+
+    @PostMapping("/charge_consumption")
+    public Mono<ApiResponse<Credit>> chargeConsumptionCreditCard(@RequestBody UpdateBalanceDTO updateBalanceDTO) {
+        return service.chargeConsumptionCreditCard(updateBalanceDTO)
+                .map(updatedAccount -> new ApiResponse<>("chargeConsumption actualizado correctamente", updatedAccount, 200))
+                .doOnError(e -> logger.error("Error updating chargeConsumption for bank account ID: {}", updateBalanceDTO.getProductTypeId(), e));
+    }
+
+    @PostMapping("/check_available_balance")
+    public Mono<ApiResponse<BigDecimal>> getAvailableBalanceByCustomerId(@RequestBody GetAvailableBalanceDTO getAvailableBalanceDTO) {
+        return service.getAvailableBalanceByCustomerId(getAvailableBalanceDTO)
+                .map(balance -> new ApiResponse<>("Saldo disponible encontrado", balance, 200))
+                .doOnError(e -> logger.error("Error fetching available balance for customer ID: {} and account type: {}", getAvailableBalanceDTO.getCustomerId(), getAvailableBalanceDTO.getCreditType(), e));
     }
 
 
