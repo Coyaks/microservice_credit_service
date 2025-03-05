@@ -7,6 +7,7 @@ import com.skoy.bootcamp_microservices.enums.CreditTypeEnum;
 import com.skoy.bootcamp_microservices.model.Credit;
 import com.skoy.bootcamp_microservices.service.ICreditService;
 import com.skoy.bootcamp_microservices.utils.ApiResponse;
+import com.skoy.bootcamp_microservices.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +42,9 @@ public class CreditController {
         return service.findById(id)
                 .map(customer -> {
                     logger.info("credits found: {}", customer);
-                    return new ApiResponse<>("Cliente encontrado", customer, 200);
+                    return new ApiResponse<>("Cliente encontrado", customer, Constants.STATUS_OK);
                 })
-                .switchIfEmpty(Mono.just(new ApiResponse<>("Cliente no encontrado", null, 404)))
+                .switchIfEmpty(Mono.just(new ApiResponse<>("Cliente no encontrado", null, Constants.STATUS_E404)))
                 .doOnError(e -> logger.error("Error fetching credits with ID: {}", id, e));
     }
 
@@ -55,10 +56,10 @@ public class CreditController {
                 .map(createdItem -> {
                     if (createdItem != null) {
                         logger.info("credits created successfully: {}", createdItem);
-                        return new ApiResponse<>("ok", createdItem, 200);
+                        return new ApiResponse<>("ok", createdItem, Constants.STATUS_OK);
                     } else {
                         logger.error("Error creating credits");
-                        return new ApiResponse<>("error", null, 500);
+                        return new ApiResponse<>("error", null, Constants.STATUS_E500);
                     }
                 });
     }
@@ -70,9 +71,9 @@ public class CreditController {
                 .flatMap(existingItem -> service.update(id, creditDto)
                         .map(updatedItem -> {
                             logger.info("credits updated successfully: {}", updatedItem);
-                            return new ApiResponse<>("Actualizado correctamente", updatedItem, 200);
+                            return new ApiResponse<>("Actualizado correctamente", updatedItem, Constants.STATUS_OK);
                         }))
-                .switchIfEmpty(Mono.just(new ApiResponse<>("ID no encontrado", null, 404)))
+                .switchIfEmpty(Mono.just(new ApiResponse<>("ID no encontrado", null, Constants.STATUS_E404)))
                 .doOnError(e -> logger.error("Error updating credits with ID: {}", id, e));
     }
 
@@ -81,11 +82,11 @@ public class CreditController {
         logger.info("Deleting credits with ID: {}", id);
         return service.findById(id)
                 .flatMap(existingItem -> service.delete(id)
-                        .then(Mono.just(new ApiResponse<Void>("Eliminado correctamente", null, 200))))
-                .switchIfEmpty(Mono.just(new ApiResponse<Void>("ID no encontrado", null, 404)))
+                        .then(Mono.just(new ApiResponse<Void>("Eliminado correctamente", null, Constants.STATUS_OK))))
+                .switchIfEmpty(Mono.just(new ApiResponse<Void>("ID no encontrado", null, Constants.STATUS_E404)))
                 .onErrorResume(e -> {
                     logger.error("Error deleting credits with ID: {}", id, e);
-                    return Mono.just(new ApiResponse<Void>("Error al eliminar", null, 500));
+                    return Mono.just(new ApiResponse<Void>("Error al eliminar", null, Constants.STATUS_E500));
                 });
     }
 
@@ -106,21 +107,21 @@ public class CreditController {
     public Mono<ApiResponse<Credit>> updateBalance(@RequestBody UpdateBalanceDTO updateBalanceDTO) {
         logger.info("Updating balance for bank account ID: {}", updateBalanceDTO.getProductTypeId());
         return service.updateBalance(updateBalanceDTO)
-                .map(updatedAccount -> new ApiResponse<>("Balance actualizado correctamente", updatedAccount, 200))
+                .map(updatedAccount -> new ApiResponse<>("Balance actualizado correctamente", updatedAccount, Constants.STATUS_OK))
                 .doOnError(e -> logger.error("Error updating balance for bank account ID: {}", updateBalanceDTO.getProductTypeId(), e));
     }
 
     @PostMapping("/charge_consumption")
     public Mono<ApiResponse<Credit>> chargeConsumptionCreditCard(@RequestBody UpdateBalanceDTO updateBalanceDTO) {
         return service.chargeConsumptionCreditCard(updateBalanceDTO)
-                .map(updatedAccount -> new ApiResponse<>("chargeConsumption actualizado correctamente", updatedAccount, 200))
+                .map(updatedAccount -> new ApiResponse<>("chargeConsumption actualizado correctamente", updatedAccount, Constants.STATUS_OK))
                 .doOnError(e -> logger.error("Error updating chargeConsumption for bank account ID: {}", updateBalanceDTO.getProductTypeId(), e));
     }
 
     @PostMapping("/check_available_balance")
     public Mono<ApiResponse<BigDecimal>> getAvailableBalanceByCustomerId(@RequestBody GetAvailableBalanceDTO getAvailableBalanceDTO) {
         return service.getAvailableBalanceByCustomerId(getAvailableBalanceDTO)
-                .map(balance -> new ApiResponse<>("Saldo disponible encontrado", balance, 200))
+                .map(balance -> new ApiResponse<>("Saldo disponible encontrado", balance, Constants.STATUS_OK))
                 .doOnError(e -> logger.error("Error fetching available balance for customer ID: {} and account type: {}", getAvailableBalanceDTO.getCustomerId(), getAvailableBalanceDTO.getCreditType(), e));
     }
 

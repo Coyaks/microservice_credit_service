@@ -55,7 +55,8 @@ public class CreditService implements ICreditService {
                 .get()
                 .uri(customerServiceUrl + "/customers/" + accountDTO.getCustomerId())
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<ApiResponse<CustomerDTO>>() {})
+                .bodyToMono(new ParameterizedTypeReference<ApiResponse<CustomerDTO>>() {
+                })
                 .flatMap(rspCustomer -> {
                     CustomerDTO customer = rspCustomer.getData();
                     if (customer == null) return Mono.error(new RuntimeException("Cliente no encontrado"));
@@ -134,7 +135,8 @@ public class CreditService implements ICreditService {
                 .get()
                 .uri(customerServiceUrl + "/customers/" + getAvailableBalanceDTO.getCustomerId())
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<ApiResponse<CustomerDTO>>() {})
+                .bodyToMono(new ParameterizedTypeReference<ApiResponse<CustomerDTO>>() {
+                })
                 .flatMap(response -> {
                     if (response.getData() == null) return Mono.error(new RuntimeException("Cliente no encontrado"));
                     return repository.findAllByCustomerId(getAvailableBalanceDTO.getCustomerId())

@@ -11,7 +11,7 @@
  Target Server Version : 80004 (8.0.4)
  File Encoding         : 65001
 
- Date: 05/03/2025 01:46:36
+ Date: 05/03/2025 08:08:34
 */
 
 
@@ -51,4 +51,22 @@ db.getCollection("credits").insert([ {
     availableBalance: "1000",
     currency: "PEN",
     _class: "com.skoy.microservice_credit_service.model.Credit"
+} ]);
+db.getCollection("credits").insert([ {
+    _id: ObjectId("67c8182dca1fea340ad92b28"),
+    customerId: "67c80f32d082587cc57705a6",
+    creditType: "TARJETA_CREDITO",
+    creditLimit: "1000",
+    availableBalance: "1000",
+    currency: "PEN",
+    _class: "com.skoy.bootcamp_microservices.model.Credit"
+} ]);
+db.getCollection("credits").insert([ {
+    _id: ObjectId("67c83ef7ca1fea340ad92b29"),
+    customerId: "67c8191ad082587cc57705a7",
+    creditType: "TARJETA_CREDITO",
+    creditLimit: "1000",
+    availableBalance: "1000",
+    currency: "PEN",
+    _class: "com.skoy.bootcamp_microservices.model.Credit"
 } ]);
