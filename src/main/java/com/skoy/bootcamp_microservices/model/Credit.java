@@ -1,13 +1,13 @@
-package com.skoy.microservice_credit_service.model;
+package com.skoy.bootcamp_microservices.model;
 
-import com.skoy.microservice_credit_service.enums.CardTypeEnum;
-import com.skoy.microservice_credit_service.enums.CreditStatusEnum;
-import com.skoy.microservice_credit_service.enums.CreditTypeEnum;
-import com.skoy.microservice_credit_service.enums.CurrencyEnum;
+import com.skoy.bootcamp_microservices.enums.CardTypeEnum;
+import com.skoy.bootcamp_microservices.enums.CreditStatusEnum;
+import com.skoy.bootcamp_microservices.enums.CreditTypeEnum;
+import com.skoy.bootcamp_microservices.enums.CurrencyEnum;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 

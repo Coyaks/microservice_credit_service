@@ -1,6 +1,6 @@
-package com.skoy.microservice_credit_service.dto;
+package com.skoy.bootcamp_microservices.dto;
 
-import com.skoy.microservice_credit_service.enums.TransactionTypeEnum;
+import com.skoy.bootcamp_microservices.enums.TransactionTypeEnum;
 import lombok.Getter;
 import lombok.Setter;
 

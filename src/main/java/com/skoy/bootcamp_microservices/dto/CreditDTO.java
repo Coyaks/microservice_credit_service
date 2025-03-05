@@ -1,8 +1,10 @@
-package com.skoy.microservice_credit_service.dto;
+package com.skoy.bootcamp_microservices.dto;
 
-import com.skoy.microservice_credit_service.enums.CreditTypeEnum;
-import com.skoy.microservice_credit_service.enums.CurrencyEnum;
-import lombok.*;
+import com.skoy.bootcamp_microservices.enums.CreditTypeEnum;
+import com.skoy.bootcamp_microservices.enums.CurrencyEnum;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 

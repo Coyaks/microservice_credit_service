@@ -1,12 +1,12 @@
-package com.skoy.microservice_credit_service.controller;
+package com.skoy.bootcamp_microservices.controller;
 
-import com.skoy.microservice_credit_service.dto.CreditDTO;
-import com.skoy.microservice_credit_service.dto.GetAvailableBalanceDTO;
-import com.skoy.microservice_credit_service.dto.UpdateBalanceDTO;
-import com.skoy.microservice_credit_service.enums.CreditTypeEnum;
-import com.skoy.microservice_credit_service.model.Credit;
-import com.skoy.microservice_credit_service.service.ICreditService;
-import com.skoy.microservice_credit_service.utils.ApiResponse;
+import com.skoy.bootcamp_microservices.dto.CreditDTO;
+import com.skoy.bootcamp_microservices.dto.GetAvailableBalanceDTO;
+import com.skoy.bootcamp_microservices.dto.UpdateBalanceDTO;
+import com.skoy.bootcamp_microservices.enums.CreditTypeEnum;
+import com.skoy.bootcamp_microservices.model.Credit;
+import com.skoy.bootcamp_microservices.service.ICreditService;
+import com.skoy.bootcamp_microservices.utils.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

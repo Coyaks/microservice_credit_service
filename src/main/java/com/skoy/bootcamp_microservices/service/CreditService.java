@@ -1,29 +1,26 @@
-package com.skoy.microservice_credit_service.service;
+package com.skoy.bootcamp_microservices.service;
 
-import com.skoy.microservice_credit_service.dto.CreditDTO;
-import com.skoy.microservice_credit_service.dto.CustomerDTO;
-import com.skoy.microservice_credit_service.dto.GetAvailableBalanceDTO;
-import com.skoy.microservice_credit_service.dto.UpdateBalanceDTO;
-import com.skoy.microservice_credit_service.enums.TransactionTypeEnum;
-import com.skoy.microservice_credit_service.mapper.CreditMapper;
-import com.skoy.microservice_credit_service.model.Credit;
-import com.skoy.microservice_credit_service.repository.ICreditRepository;
-import com.skoy.microservice_credit_service.utils.ApiResponse;
+import com.skoy.bootcamp_microservices.dto.CreditDTO;
+import com.skoy.bootcamp_microservices.dto.CustomerDTO;
+import com.skoy.bootcamp_microservices.dto.GetAvailableBalanceDTO;
+import com.skoy.bootcamp_microservices.dto.UpdateBalanceDTO;
+import com.skoy.bootcamp_microservices.enums.TransactionTypeEnum;
+import com.skoy.bootcamp_microservices.mapper.CreditMapper;
+import com.skoy.bootcamp_microservices.model.Credit;
+import com.skoy.bootcamp_microservices.repository.ICreditRepository;
+import com.skoy.bootcamp_microservices.utils.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

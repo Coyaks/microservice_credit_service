@@ -1,9 +1,9 @@
-package com.skoy.microservice_credit_service.service;
+package com.skoy.bootcamp_microservices.service;
 
-import com.skoy.microservice_credit_service.dto.CreditDTO;
-import com.skoy.microservice_credit_service.dto.GetAvailableBalanceDTO;
-import com.skoy.microservice_credit_service.dto.UpdateBalanceDTO;
-import com.skoy.microservice_credit_service.model.Credit;
+import com.skoy.bootcamp_microservices.dto.CreditDTO;
+import com.skoy.bootcamp_microservices.dto.GetAvailableBalanceDTO;
+import com.skoy.bootcamp_microservices.dto.UpdateBalanceDTO;
+import com.skoy.bootcamp_microservices.model.Credit;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

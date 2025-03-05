@@ -1,7 +1,7 @@
-package com.skoy.microservice_credit_service.mapper;
+package com.skoy.bootcamp_microservices.mapper;
 
-import com.skoy.microservice_credit_service.dto.CreditDTO;
-import com.skoy.microservice_credit_service.model.Credit;
+import com.skoy.bootcamp_microservices.dto.CreditDTO;
+import com.skoy.bootcamp_microservices.model.Credit;
 
 public class CreditMapper {
 

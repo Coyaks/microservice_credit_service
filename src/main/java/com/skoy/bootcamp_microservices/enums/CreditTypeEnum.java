@@ -1,4 +1,4 @@
-package com.skoy.microservice_credit_service.enums;
+package com.skoy.bootcamp_microservices.enums;
 
 public enum CreditTypeEnum {
     PERSONAL,

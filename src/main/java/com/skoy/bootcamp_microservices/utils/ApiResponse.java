@@ -1,4 +1,4 @@
-package com.skoy.microservice_credit_service.utils;
+package com.skoy.bootcamp_microservices.utils;
 
 public class ApiResponse<T> {
 

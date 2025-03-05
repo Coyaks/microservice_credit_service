@@ -1,4 +1,4 @@
-package com.skoy.microservice_credit_service.dto;
+package com.skoy.bootcamp_microservices.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

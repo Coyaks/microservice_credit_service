@@ -1,6 +1,6 @@
-package com.skoy.microservice_credit_service.repository;
+package com.skoy.bootcamp_microservices.repository;
 
-import com.skoy.microservice_credit_service.model.Credit;
+import com.skoy.bootcamp_microservices.model.Credit;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import reactor.core.publisher.Flux;
 
