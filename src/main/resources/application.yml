@@ -1,0 +1,24 @@
+server:
+  port: 9003
+spring:
+  application:
+    name: credit_service
+  data:
+    mongodb:
+      uri: mongodb://admin:password@localhost:27003/microservice_credit_service?authSource=admin
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+services:
+  customer: http://localhost:9001/api/v1
+  bankaccount: http://localhost:9002/api/v1
+  credit: http://localhost:9003/api/v1
+  transaction: http://localhost:9004/api/v1
+  report: http://localhost:9005/api/v1
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    preferIpAddress: true

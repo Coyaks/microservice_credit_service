@@ -32,10 +32,10 @@ public class CreditService implements ICreditService {
     private final WebClient.Builder webClientBuilder;
     private static final Logger logger = LoggerFactory.getLogger(CreditService.class);
 
-    @Value("${customer.service.url}")
+    @Value("${services.customer}")
     private String customerServiceUrl;
 
-    @Value("${bankaccount.service.url}")
+    @Value("${services.bankaccount}")
     private String bankAccountServiceUrl;
 
     @Override
@@ -50,38 +50,6 @@ public class CreditService implements ICreditService {
                 .map(CreditMapper::toDto);
     }
 
-//    @Override
-//    public Mono<CreditDTO> create_(CreditDTO accountDTO) {
-//        return webClientBuilder.build()
-//                .get()
-//                .uri(customerServiceUrl + "/customers/" + accountDTO.getCustomerId())
-//                .retrieve()
-//                .bodyToMono(new ParameterizedTypeReference<ApiResponse<CustomerDTO>>() {
-//                })
-//                .flatMap(rspCustomer -> {
-//                    CustomerDTO customer = rspCustomer.getData();
-//                    if (customer == null) return Mono.error(new RuntimeException("Cliente no encontrado"));
-//                    // Un cliente puede tener un producto de crédito sin la obligación de tener una cuenta bancaria
-//                    logger.info("customer {}: {}", customerServiceUrl, customer);
-//
-//                    if (accountDTO.getCreditType() == CreditTypeEnum.PERSONAL) {
-//                        return repository.findAllByCustomerId(accountDTO.getCustomerId())
-//                                .filter(credit -> credit.getCreditType() == CreditTypeEnum.PERSONAL)
-//                                .hasElements()
-//                                .flatMap(hasPersonalCredit -> {
-//                                    if (hasPersonalCredit) {
-//                                        return Mono.error(new RuntimeException("El cliente ya tiene un crédito personal"));
-//                                    }
-//                                    return repository.save(CreditMapper.toEntity(accountDTO))
-//                                            .map(CreditMapper::toDto);
-//                                });
-//                    } else {
-//                        return repository.save(CreditMapper.toEntity(accountDTO))
-//                                .map(CreditMapper::toDto);
-//                    }
-//                })
-//                .doOnError(error -> logger.error("Error al validar cliente: {}", error.getMessage()));
-//    }
 
     @Override
     public Mono<CreditDTO> create(CreditDTO accountDTO) {
