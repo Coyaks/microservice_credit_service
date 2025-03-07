@@ -21,4 +21,5 @@ public interface ICreditService {
     Mono<Credit> updateBalance(UpdateBalanceDTO updateBalanceDTO);
     Mono<Credit> chargeConsumptionCreditCard(UpdateBalanceDTO updateBalanceDTO);
     Mono<BigDecimal> getAvailableBalanceByCustomerId(GetAvailableBalanceDTO getAvailableBalanceDTO);
+    Flux<CreditDTO> getOverdueCredits(String customerId);
 }

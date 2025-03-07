@@ -3,7 +3,8 @@ package com.skoy.bootcamp_microservices.enums;
 public enum CreditStatusEnum {
     ACTIVE("Activo"),
     BLOCKED("Bloqueado"),
-    EXPIRED("Expirado"),;
+    EXPIRED("Expirado"),
+    DEBT("Deuda"),;
 
     private final String name;
 

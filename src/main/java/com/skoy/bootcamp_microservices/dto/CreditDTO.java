@@ -1,5 +1,6 @@
 package com.skoy.bootcamp_microservices.dto;
 
+import com.skoy.bootcamp_microservices.enums.CreditStatusEnum;
 import com.skoy.bootcamp_microservices.enums.CreditTypeEnum;
 import com.skoy.bootcamp_microservices.enums.CurrencyEnum;
 import lombok.AllArgsConstructor;
@@ -19,5 +20,6 @@ public class CreditDTO {
     private BigDecimal availableBalance;
     private BigDecimal usedCredit;
     private CurrencyEnum currency;
+    private CreditStatusEnum status;
 
 }

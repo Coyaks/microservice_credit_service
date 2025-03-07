@@ -3,6 +3,7 @@ package com.skoy.bootcamp_microservices.controller;
 import com.skoy.bootcamp_microservices.dto.CreditDTO;
 import com.skoy.bootcamp_microservices.dto.GetAvailableBalanceDTO;
 import com.skoy.bootcamp_microservices.dto.UpdateBalanceDTO;
+import com.skoy.bootcamp_microservices.enums.CreditStatusEnum;
 import com.skoy.bootcamp_microservices.enums.CreditTypeEnum;
 import com.skoy.bootcamp_microservices.model.Credit;
 import com.skoy.bootcamp_microservices.service.ICreditService;
@@ -16,6 +17,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 
 @RestController
@@ -95,6 +97,11 @@ public class CreditController {
         return CreditTypeEnum.values();
     }
 
+    @GetMapping("/status")
+    public CreditStatusEnum[] getAllCreditStatus() {
+        return CreditStatusEnum.values();
+    }
+
     @GetMapping("/customer/{customerId}")
     public Flux<CreditDTO> findAllByCustomerId(@PathVariable String customerId) {
         logger.info("Fetching credits for customer ID: {}", customerId);
@@ -123,6 +130,19 @@ public class CreditController {
         return service.getAvailableBalanceByCustomerId(getAvailableBalanceDTO)
                 .map(balance -> new ApiResponse<>("Saldo disponible encontrado", balance, Constants.STATUS_OK))
                 .doOnError(e -> logger.error("Error fetching available balance for customer ID: {} and account type: {}", getAvailableBalanceDTO.getCustomerId(), getAvailableBalanceDTO.getCreditType(), e));
+    }
+
+
+    @GetMapping("/debt/{customerId}")
+    public Mono<ApiResponse<List<CreditDTO>>> getOverdueCredits(@PathVariable String customerId) {
+        logger.info("Fetching overdue credits for customer ID: {}", customerId);
+        return service.getOverdueCredits(customerId)
+                .collectList()
+                .map(overdueCredits -> {
+                    logger.info("All overdue credits for customer fetched successfully.");
+                    return new ApiResponse<>("", overdueCredits, Constants.STATUS_OK, !overdueCredits.isEmpty());
+                })
+                .doOnError(error -> logger.error("Error fetching overdue credits: {}", error.getMessage()));
     }
 
 

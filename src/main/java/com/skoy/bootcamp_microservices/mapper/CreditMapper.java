@@ -14,6 +14,7 @@ public class CreditMapper {
         item.setAvailableBalance(dto.getAvailableBalance());
         item.setUsedCredit(dto.getUsedCredit());
         item.setCurrency(dto.getCurrency());
+        item.setStatus(dto.getStatus());
         return item;
     }
 
@@ -26,6 +27,7 @@ public class CreditMapper {
         dto.setAvailableBalance(item.getAvailableBalance());
         dto.setUsedCredit(item.getUsedCredit());
         dto.setCurrency(item.getCurrency());
+        dto.setStatus(item.getStatus());
         return dto;
     }
 }

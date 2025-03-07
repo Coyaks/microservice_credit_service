@@ -4,6 +4,8 @@ import com.skoy.bootcamp_microservices.dto.CreditDTO;
 import com.skoy.bootcamp_microservices.dto.CustomerDTO;
 import com.skoy.bootcamp_microservices.dto.GetAvailableBalanceDTO;
 import com.skoy.bootcamp_microservices.dto.UpdateBalanceDTO;
+import com.skoy.bootcamp_microservices.enums.CreditStatusEnum;
+import com.skoy.bootcamp_microservices.enums.CreditTypeEnum;
 import com.skoy.bootcamp_microservices.enums.TransactionTypeEnum;
 import com.skoy.bootcamp_microservices.mapper.CreditMapper;
 import com.skoy.bootcamp_microservices.model.Credit;
@@ -48,9 +50,41 @@ public class CreditService implements ICreditService {
                 .map(CreditMapper::toDto);
     }
 
+//    @Override
+//    public Mono<CreditDTO> create_(CreditDTO accountDTO) {
+//        return webClientBuilder.build()
+//                .get()
+//                .uri(customerServiceUrl + "/customers/" + accountDTO.getCustomerId())
+//                .retrieve()
+//                .bodyToMono(new ParameterizedTypeReference<ApiResponse<CustomerDTO>>() {
+//                })
+//                .flatMap(rspCustomer -> {
+//                    CustomerDTO customer = rspCustomer.getData();
+//                    if (customer == null) return Mono.error(new RuntimeException("Cliente no encontrado"));
+//                    // Un cliente puede tener un producto de crédito sin la obligación de tener una cuenta bancaria
+//                    logger.info("customer {}: {}", customerServiceUrl, customer);
+//
+//                    if (accountDTO.getCreditType() == CreditTypeEnum.PERSONAL) {
+//                        return repository.findAllByCustomerId(accountDTO.getCustomerId())
+//                                .filter(credit -> credit.getCreditType() == CreditTypeEnum.PERSONAL)
+//                                .hasElements()
+//                                .flatMap(hasPersonalCredit -> {
+//                                    if (hasPersonalCredit) {
+//                                        return Mono.error(new RuntimeException("El cliente ya tiene un crédito personal"));
+//                                    }
+//                                    return repository.save(CreditMapper.toEntity(accountDTO))
+//                                            .map(CreditMapper::toDto);
+//                                });
+//                    } else {
+//                        return repository.save(CreditMapper.toEntity(accountDTO))
+//                                .map(CreditMapper::toDto);
+//                    }
+//                })
+//                .doOnError(error -> logger.error("Error al validar cliente: {}", error.getMessage()));
+//    }
+
     @Override
     public Mono<CreditDTO> create(CreditDTO accountDTO) {
-
         return webClientBuilder.build()
                 .get()
                 .uri(customerServiceUrl + "/customers/" + accountDTO.getCustomerId())
@@ -63,8 +97,32 @@ public class CreditService implements ICreditService {
                     // Un cliente puede tener un producto de crédito sin la obligación de tener una cuenta bancaria
                     logger.info("customer {}: {}", customerServiceUrl, customer);
 
-                    return repository.save(CreditMapper.toEntity(accountDTO))
-                            .map(CreditMapper::toDto);
+                    // Verificar si el cliente tiene alguna deuda vencida
+                    return repository.findAllByCustomerId(accountDTO.getCustomerId())
+                            .filter(credit -> credit.getStatus() == CreditStatusEnum.DEBT)
+                            .hasElements()
+                            .flatMap(hasDebt -> {
+                                if (hasDebt) {
+                                    return Mono.error(new RuntimeException("El cliente tiene una deuda vencida y no puede adquirir un nuevo producto de crédito"));
+                                } else {
+                                    if (accountDTO.getCreditType() == CreditTypeEnum.PERSONAL) {
+                                        return repository.findAllByCustomerId(accountDTO.getCustomerId())
+                                                .filter(credit -> credit.getCreditType() == CreditTypeEnum.PERSONAL)
+                                                .hasElements()
+                                                .flatMap(hasPersonalCredit -> {
+                                                    if (hasPersonalCredit) {
+                                                        return Mono.error(new RuntimeException("El cliente ya tiene un crédito personal"));
+                                                    } else {
+                                                        return repository.save(CreditMapper.toEntity(accountDTO))
+                                                                .map(CreditMapper::toDto);
+                                                    }
+                                                });
+                                    } else {
+                                        return repository.save(CreditMapper.toEntity(accountDTO))
+                                                .map(CreditMapper::toDto);
+                                    }
+                                }
+                            });
                 })
                 .doOnError(error -> logger.error("Error al validar cliente: {}", error.getMessage()));
     }
@@ -147,5 +205,11 @@ public class CreditService implements ICreditService {
                 });
     }
 
+    @Override
+    public Flux<CreditDTO> getOverdueCredits(String customerId) {
+        return repository.findAllByCustomerId(customerId)
+                .filter(credit -> credit.getStatus() == CreditStatusEnum.DEBT)
+                .map(CreditMapper::toDto);
+    }
 
 }

@@ -24,7 +24,8 @@ public class Credit {
     private BigDecimal usedCredit = BigDecimal.ZERO;; // Saldo ya utilizado
 
     private CurrencyEnum currency;
-    private CreditStatusEnum status;
+    //private CreditStatusEnum status;
+    private CreditStatusEnum status = CreditStatusEnum.ACTIVE;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
