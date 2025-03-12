@@ -27,6 +27,6 @@ public class OpenApiConfig {
                                 .url("http://springdoc.org")))
                 .externalDocs(new ExternalDocumentation()
                         .description("Documentación del Proyecto")
-                        .url("https://github.com/Coyaks/microservice_credit_service.git"));
+                        .url("https://github.com/Coyaks/microservice_card_service.git"));
     }
 }

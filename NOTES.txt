@@ -1,0 +1,16 @@
+  /*@GetMapping
+    public Mono<ApiResponse<Flux<CustomerDto>>> getAllCustomers() {
+        return customerService.FindAll()
+                .collectList()
+                .map(customers -> new ApiResponse<>("ok", Flux.fromIterable(customers), 200));
+    }*/
+
+    /*@GetMapping
+    public Mono<ApiResponse<List<CustomerDto>>> getAllCustomers() {
+        return customerService.FindAll()
+                .collectList()
+                .map(customers -> new ApiResponse<>("ok", customers, 200));
+    }*/
+
+SWAGGER
+http://localhost:9001/swagger-ui/index.html

@@ -1,6 +1,6 @@
 package com.skoy.bootcamp_microservices.enums;
 
-public enum CreditStatusEnum {
+public enum CardStatusEnum {
     ACTIVE("Activo"),
     BLOCKED("Bloqueado"),
     EXPIRED("Expirado"),
@@ -8,7 +8,7 @@ public enum CreditStatusEnum {
 
     private final String name;
 
-    CreditStatusEnum(String name) {
+    CardStatusEnum(String name) {
         this.name = name;
     }
     public String getName() {
