@@ -1,6 +1,8 @@
 package com.skoy.bootcamp_microservices.service;
 
-import com.skoy.bootcamp_microservices.dto.*;
+import com.skoy.bootcamp_microservices.dto.BankAccountDTO;
+import com.skoy.bootcamp_microservices.dto.CardDTO;
+import com.skoy.bootcamp_microservices.dto.UpdateBalanceDTO;
 import com.skoy.bootcamp_microservices.enums.TransactionTypeEnum;
 import com.skoy.bootcamp_microservices.mapper.CardMapper;
 import com.skoy.bootcamp_microservices.model.Card;
@@ -115,7 +117,6 @@ public class CardService implements ICardService {
                                                 .thenReturn(true);
                                     } else {
                                         return Mono.error(new RuntimeException("Fondos insuficientes"));
-                                        //return processFallbackAccounts(card, amount);
                                     }
                                 } else {
                                     return Mono.error(new RuntimeException("Error al obtener la cuenta bancaria"));
@@ -137,7 +138,6 @@ public class CardService implements ICardService {
                 .flatMap(response -> {
                     if (response.getStatusCode() == 200 && response.getData() != null) {
                         BankAccountDTO updatedAccount = response.getData();
-                        // Aquí puedes manejar el objeto updatedAccount si es necesario
 
                         Transaction transaction = new Transaction();
                         transaction.setCustomerId(account.getCustomerId());
@@ -150,31 +150,12 @@ public class CardService implements ICardService {
 
                         return Transaction.createTransaction(webClientBuilder, transaction)
                                 .thenReturn(true);
-                        //return Mono.just(true);
                     } else {
                         return Mono.error(new RuntimeException("Error al actualizar el balance"));
                     }
                 });
     }
 
-
-    private Mono<Boolean> processFallbackAccounts_(CardDTO card, BigDecimal amount) {
-        return webClientBuilder.build()
-                .get()
-                .uri(bankAccountServiceUrl + "/bank_accounts/customer/" + card.getCustomerId())
-                .retrieve()
-                .bodyToFlux(BankAccountDTO.class)
-                .map(BankAccountDTO::getId)
-                .flatMap(accountId -> webClientBuilder.build()
-                        .get()
-                        .uri(bankAccountServiceUrl + "/bank_accounts/" + accountId)
-                        .retrieve()
-                        .bodyToMono(BankAccountDTO.class))
-                .filter(account -> account.getAvailableBalance().compareTo(amount) >= 0)
-                .next()
-                .flatMap(account -> applyTransaction(account, amount, null))
-                .switchIfEmpty(Mono.just(false));
-    }
 
     @Override
     public Mono<BigDecimal> getMainAccountBalance(String cardId) {
