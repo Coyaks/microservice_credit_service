@@ -27,6 +27,13 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class CardService implements ICardService {
 
+    private static final int END_OF_DAY_HOUR = 23;
+    private static final int END_OF_DAY_MINUTE = 59;
+    private static final int END_OF_DAY_SECOND = 59;
+    private static final int END_OF_DAY_NANO = 999999999;
+    private static final int HTTP_STATUS_OK = 200;
+
+
     private final ICardRepository repository;
     private final WebClient.Builder webClientBuilder;
     private static final Logger logger = LoggerFactory.getLogger(CardService.class);
@@ -80,8 +87,7 @@ public class CardService implements ICardService {
 
     @Override
     public Flux<CardDTO> findAllByBankAccountId(String customerId, LocalDateTime dateFrom, LocalDateTime dateTo) {
-
-        LocalDateTime endOfDay = dateTo != null ? dateTo.withHour(23).withMinute(59).withSecond(59).withNano(999999999) : null;
+        LocalDateTime endOfDay = dateTo != null ? dateTo.withHour(END_OF_DAY_HOUR).withMinute(END_OF_DAY_MINUTE).withSecond(END_OF_DAY_SECOND).withNano(END_OF_DAY_NANO) : null;
         return repository.findAllByBankAccountId(customerId)
                 .filter(item -> (dateFrom == null || !item.getCreatedAt().isBefore(dateFrom)) &&
                         (endOfDay == null || !item.getCreatedAt().isAfter(endOfDay))).map(CardMapper::toDto);
@@ -109,7 +115,7 @@ public class CardService implements ICardService {
                             .bodyToMono(new ParameterizedTypeReference<ApiResponse<BankAccountDTO>>() {
                             })
                             .flatMap(response -> {
-                                if (response.getStatusCode() == 200 && response.getData() != null) {
+                                if (response.getStatusCode() == HTTP_STATUS_OK && response.getData() != null) {
                                     BankAccountDTO bankAccount = response.getData();
                                     BigDecimal amount = makePaymentRequest.getAmount();
                                     if (bankAccount.getAvailableBalance().compareTo(amount) >= 0) {
@@ -136,7 +142,7 @@ public class CardService implements ICardService {
                 .bodyToMono(new ParameterizedTypeReference<ApiResponse<BankAccountDTO>>() {
                 })
                 .flatMap(response -> {
-                    if (response.getStatusCode() == 200 && response.getData() != null) {
+                    if (response.getStatusCode() == HTTP_STATUS_OK && response.getData() != null) {
                         BankAccountDTO updatedAccount = response.getData();
 
                         Transaction transaction = new Transaction();
@@ -169,7 +175,7 @@ public class CardService implements ICardService {
                             .bodyToMono(new ParameterizedTypeReference<ApiResponse<BankAccountDTO>>() {
                             })
                             .flatMap(response -> {
-                                if (response.getStatusCode() == 200 && response.getData() != null) {
+                                if (response.getStatusCode() == HTTP_STATUS_OK && response.getData() != null) {
                                     return Mono.just(response.getData().getAvailableBalance());
                                 } else {
                                     return Mono.error(new RuntimeException("Error al obtener la cuenta bancaria"));

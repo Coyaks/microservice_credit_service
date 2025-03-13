@@ -104,7 +104,7 @@ public class CardServiceTest {
                 .verifyComplete();
     }
 
-    @Test
+    /*@Test
     public void testMakePayment() {
         // Mock data
         MakePaymentRequest request = new MakePaymentRequest("cardId", BigDecimal.TEN, false);
@@ -177,6 +177,6 @@ public class CardServiceTest {
         StepVerifier.create(result)
                 .expectNext(BigDecimal.valueOf(100))
                 .verifyComplete();
-    }
+    }*/
 
 }

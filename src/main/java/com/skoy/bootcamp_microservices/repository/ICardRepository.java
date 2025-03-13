@@ -6,5 +6,4 @@ import reactor.core.publisher.Flux;
 
 public interface ICardRepository extends ReactiveMongoRepository<Card, String> {
     Flux<Card> findAllByBankAccountId(String bankAccountId);
-    //Flux<Card> findAllByCustomerId(String customerId);
 }
